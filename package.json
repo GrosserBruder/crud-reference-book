@@ -26,7 +26,7 @@
     "prebuild": "npm run clean",
     "build": "tsc -p tsconfig.prod.json",
     "postbuild": "npm run copy:styles",
-    "pub": "npm run build && npm publish"
+    "pub": "npm run build && npm publish --access=public"
   },
   "bugs": {
     "url": "https://github.com/GrosserBruder/crud-reference-book/issues"

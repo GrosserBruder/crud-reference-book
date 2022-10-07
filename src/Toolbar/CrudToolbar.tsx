@@ -4,6 +4,7 @@ import Edit from "@mui/icons-material/Edit"
 import Delete from "@mui/icons-material/Delete"
 import ToolbarButton, { ToolbarButtonProps } from "./ToolbarButton";
 import { AllFilterData, DataItem } from "@grossb/react-data-table";
+import "../styles/Toolbar.scss"
 
 export type ToolbarProps<T extends DataItem = DataItem> = {
   children?: ReactNode
