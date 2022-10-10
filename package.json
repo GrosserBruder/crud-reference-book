@@ -2,7 +2,7 @@
   "name": "crud-reference-book",
   "version": "0.0.1",
   "dependencies": {
-    "@grossb/reference-book": "^0.0.1",
+    "@grossb/reference-book": "^0.0.2",
     "@mui/material": "^5.10.8",
     "react-final-form": "^6.5.9"
   },
