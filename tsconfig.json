@@ -17,22 +17,11 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
-    "noEmit": false,
-    "outDir": "dist",
-    "declaration": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "dist/*"
-      ]
-    }
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  // "files": [
-  //   "dist"
-  // ],
   "include": [
-    "src"
+    "src/CrudRefBook"
   ],
   "exclude": [
     "node_modules"

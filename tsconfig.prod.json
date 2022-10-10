@@ -4,11 +4,6 @@
     "noEmit": false,
     "outDir": "dist",
     "declaration": true,
-    // "baseUrl": ".",
-    // "paths": {
-    //   "*": [
-    //     "dist/*"
-    //   ]
-    // }
+    "jsx": "react-jsx",
   }
 }

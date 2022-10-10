@@ -5,6 +5,8 @@ import { memo, ReactNode, useCallback, useState } from "react"
 import { useFormApi } from "./hooks"
 import { Toolbar } from "./Toolbar"
 import { ToolbarProps } from "./Toolbar/CrudToolbar"
+import useDeleteApi from "./hooks/useDeleteApi"
+import { DeleteDialog } from "./DeleteDialog/DeleteDialog"
 
 export type CrudRefBookFormProps = RefBookFormProps & {
   selectedItem?: DataItem
@@ -23,12 +25,18 @@ export type CrudRefBookProps<T extends DataItem = DataItem> = Omit<RefBookProps<
 }
 
 const MemoToolbar = memo(Toolbar) as typeof Toolbar
+const MemoDeleteDialog = memo(DeleteDialog) as typeof DeleteDialog
 
 export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookProps<T>) {
   const { createHandler, updateHandler, onRowClick, form, onCloseForm, deleteHandler, isLoading, loader, ...otherProps } = props
 
+
   const { formStatus, closeForm, openForm } = useFormApi()
+  const { isDeleteDialogOpen, closeDeleteDialog, openDeleteDialog } = useDeleteApi()
+
   const [selectedItem, setSelectedItem] = useState<T | undefined>(undefined)
+  const [selectedItems, setSelectedItems] = useState<Array<T>>([])
+  const [isDeleteProcess, setIsDeleteProcess] = useState<boolean>(false)
 
   const onRowClickHandler = useCallback((event: any, dataItem: T) => {
     setSelectedItem(dataItem)
@@ -52,12 +60,15 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
     return createHandler(data)
   }, [createHandler])
 
-  const onDelete = useCallback(async (data: any) => {
+  const onDelete = useCallback(async (data: Array<T>) => {
     if (!deleteHandler) {
       throw new Error("deleteHandler is not found")
     }
 
+    setIsDeleteProcess(true)
+
     return deleteHandler(data)
+      .finally(() => setIsDeleteProcess(false))
   }, [deleteHandler])
 
   const onUpdate = useCallback((data: any) => {
@@ -78,12 +89,7 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
       return onCreate(data)
         .then(() => closeForm())
     }
-    //ToDO: decide on the implementation
-    if (formStatus === FORM_STATUS.DELETE) {
-      return onDelete(data)
-        .then(() => closeForm())
-    }
-  }, [formStatus, closeForm, onCreate, onUpdate, onDelete])
+  }, [formStatus, closeForm, onCreate, onUpdate])
 
   const mergedForm = useCallback((props?: RefBookFormProps) => {
     if (formStatus === FORM_STATUS.CLOSE) return;
@@ -106,8 +112,12 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
   }, [openForm])
 
   const onToolbarDeleteClick = useCallback(() => {
-    openForm(FORM_STATUS.DELETE)
-  }, [openForm])
+    openDeleteDialog()
+  }, [openDeleteDialog])
+
+  const onAccepteDeleteHandler = useCallback(() => {
+    onDelete(selectedItems).then(closeDeleteDialog)
+  }, [onDelete, closeDeleteDialog, selectedItems])
 
   const defaultToolbar = useCallback((props: RefBookToolbarProps<T>) => {
     const mergedProps: ToolbarProps<T> = Object.assign({}, props, { formStatus, openForm, closeForm })
@@ -129,23 +139,34 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
   ])
 
   if (isLoading) {
-    return <div className="template-ref-book">
+    return <div className="crud-ref-book">
       {loader}
     </div>
   }
 
-  return <RefBook
-    sortable
-    filterable
-    selectable
-    striped
-    toolbar={defaultToolbar}
-    {...otherProps}
-    onRowClick={onRowClickHandler}
-    form={mergedForm}
-    onCloseForm={onCloseFormHandler}
-    formOpen={formStatus !== FORM_STATUS.CLOSE}
-  />
+  return <div className="crud-ref-book">
+    <RefBook
+      sortable
+      filterable
+      selectable
+      striped
+      toolbar={defaultToolbar}
+      {...otherProps}
+      onRowClick={onRowClickHandler}
+      form={mergedForm}
+      onCloseForm={onCloseFormHandler}
+      onSelectChange={setSelectedItems}
+      formOpen={formStatus !== FORM_STATUS.CLOSE}
+    />
+    <MemoDeleteDialog
+      open={isDeleteDialogOpen}
+      onCancel={closeDeleteDialog}
+      isDeleteProcess={isDeleteProcess}
+      title="Удаление"
+      content="Удалить выбранные элементы?"
+      onAccepte={onAccepteDeleteHandler}
+    />
+  </div>
 }
 
 export default CrudRefBook

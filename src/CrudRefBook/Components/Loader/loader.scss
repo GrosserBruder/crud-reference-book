@@ -1,0 +1,55 @@
+$color: rgb(103, 58, 183);
+$container-width: 64px;
+$container-height: 60px;
+$size: 52px;
+$border-width: 10px;
+
+.loader {
+  margin: 5px;
+  display: inline-block;
+  width: $container-width;
+  height: $container-height;
+
+  &:after {
+    content: " ";
+    display: block;
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    border: $border-width solid $color;
+    border-color: $color transparent $color transparent;
+    animation: spinner-lds-dual-ring 1.2s linear infinite;
+  }
+}
+
+@keyframes spinner-lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader--size-small {
+  width: 34px;
+  height: 30px;
+
+  &::after {
+    width: 24px;
+    height: 24px;
+    border-width: 4px;
+  }
+}
+
+.loader--size-medium {
+  width: 44px;
+  height: 40px;
+
+  &::after {
+    width: 32px;
+    height: 32px;
+    border-width: 6px;
+  }
+}
