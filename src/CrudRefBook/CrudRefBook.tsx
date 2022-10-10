@@ -175,7 +175,7 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
       onCancel={closeDeleteDialog}
       isDeleteProcess={isDeleteProcess}
       title="Удаление"
-      content="Удалить выбранные элементы?"
+      content="Удалить выбранные записи?"
       onAccepte={onAccepteDeleteHandler}
     />
   </div>

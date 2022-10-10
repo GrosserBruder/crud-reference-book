@@ -29,6 +29,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
       <Button
         onClick={onCancel}
         disabled={disabled || isDeleteProcess}
+        variant="outlined"
       >
         Отменить
       </Button>
@@ -36,6 +37,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
         color="error"
         onClick={onAccepte}
         disabled={disabled || isDeleteProcess}
+        variant="outlined"
       >
         Удалить
       </Button>
