@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useCallback, useState } from "react";
-//@ts-ignore
 import { CrudRefBook } from "../CrudRefBook";
 import { columns } from "./columns";
 import formFactory from "./formFactory/FormFactory";
@@ -65,7 +64,6 @@ function TestCrudRefBook() {
 
   return <CrudRefBook<DhlType>
     form={formFactory}
-    // toolbar={<RefBookToolbar />}
     data={data}
     isLoading={isLoading}
     createHandler={createCallback}
