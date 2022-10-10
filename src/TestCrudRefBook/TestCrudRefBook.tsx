@@ -23,7 +23,7 @@ const testData = [
   },
   {
     id: 2,
-    name: "3"
+    name: "2"
   },
   {
     id: 3,
