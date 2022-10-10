@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useCallback, useState } from "react";
 //@ts-ignore
 import { CrudRefBook } from "../CrudRefBook";
@@ -33,6 +33,7 @@ const testData = [
 
 function TestCrudRefBook() {
   const [data, setData] = useState(testData)
+  const [isLoading, setIsLoading] = useState(true)
 
   const createCallback = useCallback((data: any) => {
     return Promise.resolve(setData((prev) => {
@@ -41,6 +42,10 @@ function TestCrudRefBook() {
         : 1
       return [...prev, { ...data, id: maxId + 1 }]
     }))
+  }, [])
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 2000)
   }, [])
 
   const updateCallback = useCallback((data: any) => {
@@ -62,6 +67,7 @@ function TestCrudRefBook() {
     form={formFactory}
     // toolbar={<RefBookToolbar />}
     data={data}
+    isLoading={isLoading}
     createHandler={createCallback}
     updateHandler={updateCallback}
     deleteHandler={deleteCallback}

@@ -1,12 +1,14 @@
+import "./styles/CrudRefBook.scss"
 import { DataItem } from "@grossb/react-data-table"
 import { FORM_STATUS } from "./constants/const"
 import { RefBook, RefBookProps, FormProps as RefBookFormProps, ToolbarProps as RefBookToolbarProps } from "@grossb/reference-book"
-import { memo, ReactNode, useCallback, useState } from "react"
+import { FC, memo, ReactNode, useCallback, useState } from "react"
 import { useFormApi } from "./hooks"
 import { Toolbar } from "./Toolbar"
 import { ToolbarProps } from "./Toolbar/CrudToolbar"
 import useDeleteApi from "./hooks/useDeleteApi"
-import { DeleteDialog } from "./DeleteDialog/DeleteDialog"
+import { DeleteDialog, DeleteDialogProps } from "./DeleteDialog/DeleteDialog"
+import { Loader as DefaultLoader } from "./Components/Loader";
 
 export type CrudRefBookFormProps = RefBookFormProps & {
   selectedItem?: DataItem
@@ -14,21 +16,32 @@ export type CrudRefBookFormProps = RefBookFormProps & {
   formStatus: FORM_STATUS,
 }
 
-
 export type CrudRefBookProps<T extends DataItem = DataItem> = Omit<RefBookProps<T>, "form" | "formOpen"> & {
   createHandler?: (data: any) => Promise<any>
   updateHandler?: (data: any) => Promise<any>
   deleteHandler?: (data: any) => Promise<any>
   form?: (props: CrudRefBookFormProps) => ReactNode
   isLoading?: boolean
-  loader?: ReactNode
+  Loader?: FC
+  DeleteDialog?: FC<DeleteDialogProps>
 }
 
 const MemoToolbar = memo(Toolbar) as typeof Toolbar
 const MemoDeleteDialog = memo(DeleteDialog) as typeof DeleteDialog
 
 export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookProps<T>) {
-  const { createHandler, updateHandler, onRowClick, form, onCloseForm, deleteHandler, isLoading, loader, ...otherProps } = props
+  const {
+    createHandler,
+    updateHandler,
+    onRowClick,
+    form,
+    onCloseForm,
+    deleteHandler,
+    isLoading,
+    Loader = DefaultLoader,
+    DeleteDialog = MemoDeleteDialog,
+    ...otherProps
+  } = props
 
 
   const { formStatus, closeForm, openForm } = useFormApi()
@@ -140,7 +153,7 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
 
   if (isLoading) {
     return <div className="crud-ref-book">
-      {loader}
+      <Loader />
     </div>
   }
 
@@ -158,7 +171,7 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
       onSelectChange={setSelectedItems}
       formOpen={formStatus !== FORM_STATUS.CLOSE}
     />
-    <MemoDeleteDialog
+    <DeleteDialog
       open={isDeleteDialogOpen}
       onCancel={closeDeleteDialog}
       isDeleteProcess={isDeleteProcess}

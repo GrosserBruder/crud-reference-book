@@ -1,7 +1,6 @@
 {
   "name": "crud-reference-book",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.1",
   "dependencies": {
     "@grossb/reference-book": "^0.0.1",
     "@mui/material": "^5.10.8",
