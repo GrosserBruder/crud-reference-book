@@ -5,7 +5,7 @@ import { RefBook, RefBookProps, FormProps as RefBookFormProps, ToolbarProps as R
 import { FC, memo, ReactNode, useCallback, useState } from "react"
 import { useFormApi } from "./hooks"
 import { Toolbar } from "./Toolbar"
-import { ToolbarProps } from "./Toolbar/CrudToolbar"
+import { ToolbarProps } from "./Toolbar/Toolbar"
 import useDeleteApi from "./hooks/useDeleteApi"
 import { DeleteDialog, DeleteDialogProps } from "./DeleteDialog/DeleteDialog"
 import { Loader as DefaultLoader } from "./Components/Loader";

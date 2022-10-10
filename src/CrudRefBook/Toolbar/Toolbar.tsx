@@ -25,7 +25,7 @@ export type ToolbarProps<T extends DataItem = DataItem> = {
 }
 
 
-export function CrudToolbar<T extends DataItem = DataItem>(props: ToolbarProps<T>) {
+export function Toolbar<T extends DataItem = DataItem>(props: ToolbarProps<T>) {
   const {
     children, showCreateButton = true, showDeleteButton = true, showUpdateButton = true,
     onCreateClick, onDeleteClick, onUpdateClick, createButtonProps, deleteButtonProps,
@@ -90,4 +90,4 @@ export function CrudToolbar<T extends DataItem = DataItem>(props: ToolbarProps<T
   </div>
 }
 
-export default CrudToolbar
+export default Toolbar
