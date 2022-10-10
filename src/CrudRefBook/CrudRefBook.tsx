@@ -1,28 +1,36 @@
 import "./styles/CrudRefBook.scss"
 import { DataItem } from "@grossb/react-data-table"
 import { FORM_STATUS } from "./constants/const"
-import { RefBook, RefBookProps, FormProps as RefBookFormProps, ToolbarProps as RefBookToolbarProps } from "@grossb/reference-book"
-import { FC, memo, ReactNode, useCallback, useState } from "react"
+import { RefBook, RefBookProps, FormProps as RefBookFormProps } from "@grossb/reference-book"
+import { FC, memo, useCallback, useState } from "react"
 import { useFormApi } from "./hooks"
 import { Toolbar, ToolbarProps } from "./Toolbar"
 import useDeleteApi from "./hooks/useDeleteApi"
 import { DeleteDialog, DeleteDialogProps } from "./DeleteDialog/DeleteDialog"
 import { Loader as DefaultLoader } from "./Components/Loader";
 
+export type CrudRefBookToolbarProps<T extends DataItem = DataItem> = ToolbarProps<T> & {
+  formStatus: FORM_STATUS,
+  openForm: (status: FORM_STATUS) => void,
+  closeForm: () => void,
+}
+
 export type CrudRefBookFormProps = RefBookFormProps & {
   selectedItem?: DataItem
   onSubmit?: (data: any) => Promise<void> | undefined
   formStatus: FORM_STATUS,
+  closeForm: () => void,
 }
 
-export type CrudRefBookProps<T extends DataItem = DataItem> = Omit<RefBookProps<T>, "form" | "formOpen"> & {
+export type CrudRefBookProps<T extends DataItem = DataItem> = Omit<RefBookProps<T>, "Form" | "formOpen" | "Toolbar"> & {
   createHandler?: (data: any) => Promise<any>
   updateHandler?: (data: any) => Promise<any>
   deleteHandler?: (data: any) => Promise<any>
-  form?: (props: CrudRefBookFormProps) => ReactNode
+  Form?: FC<CrudRefBookFormProps>
   isLoading?: boolean
   Loader?: FC
   DeleteDialog?: FC<DeleteDialogProps>
+  Toolbar?: FC<CrudRefBookToolbarProps<T>>
 }
 
 const MemoToolbar = memo(Toolbar) as typeof Toolbar
@@ -33,12 +41,13 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
     createHandler,
     updateHandler,
     onRowClick,
-    form,
     onCloseForm,
     deleteHandler,
     isLoading,
     Loader = DefaultLoader,
     DeleteDialog = MemoDeleteDialog,
+    Form,
+    Toolbar = MemoToolbar,
     ...otherProps
   } = props
 
@@ -103,15 +112,6 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
     }
   }, [formStatus, closeForm, onCreate, onUpdate])
 
-  const mergedForm = useCallback((props?: RefBookFormProps) => {
-    if (formStatus === FORM_STATUS.CLOSE) return;
-
-    const mergedProps: CrudRefBookFormProps = Object.assign({}, props, { formStatus, closeForm, onSubmit, selectedItem })
-
-    return form?.(mergedProps)
-  }, [form, selectedItem, formStatus, onSubmit, closeForm])
-
-
   const onToolbarCreateClick = useCallback(() => {
     openForm(FORM_STATUS.CREATE)
   }, [openForm])
@@ -131,25 +131,6 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
     onDelete(selectedItems).then(closeDeleteDialog)
   }, [onDelete, closeDeleteDialog, selectedItems])
 
-  const defaultToolbar = useCallback((props: RefBookToolbarProps<T>) => {
-    const mergedProps: ToolbarProps<T> = Object.assign({}, props, { formStatus, openForm, closeForm })
-
-    return <MemoToolbar<T>
-      {...mergedProps}
-      onCreateClick={onToolbarCreateClick}
-      onUpdateClick={onToolbarUpdateClick}
-      onDeleteClick={onToolbarDeleteClick}
-      multipleDelete
-    />
-  }, [
-    onToolbarCreateClick,
-    onToolbarUpdateClick,
-    onToolbarDeleteClick,
-    formStatus,
-    openForm,
-    closeForm
-  ])
-
   if (isLoading) {
     return <div className="crud-ref-book">
       <Loader />
@@ -162,10 +143,31 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
       filterable
       selectable
       striped
-      toolbar={defaultToolbar}
+      Toolbar={Toolbar
+        ? (props) => <Toolbar
+          {...props}
+          formStatus={formStatus}
+          openForm={openForm}
+          closeForm={closeForm}
+          onCreateClick={onToolbarCreateClick}
+          onUpdateClick={onToolbarUpdateClick}
+          onDeleteClick={onToolbarDeleteClick}
+          multipleDelete
+        />
+        : undefined
+      }
       {...otherProps}
       onRowClick={onRowClickHandler}
-      form={mergedForm}
+      Form={Form
+        ? (props) => <Form
+          {...props}
+          formStatus={formStatus}
+          closeForm={closeForm}
+          onSubmit={onSubmit}
+          selectedItem={selectedItem}
+        />
+        : undefined
+      }
       onCloseForm={onCloseFormHandler}
       onSelectChange={setSelectedItems}
       formOpen={formStatus !== FORM_STATUS.CLOSE}

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useCallback, useState } from "react";
 import { CrudRefBook } from "../CrudRefBook";
 import { columns } from "./columns";
-import formFactory from "./formFactory/FormFactory";
+import FormFactory from "./formFactory/FormFactory";
 
 function delay(ms: number) {
   return new Promise((resolve) => {
@@ -63,7 +63,7 @@ function TestCrudRefBook() {
   }, [])
 
   return <CrudRefBook<DhlType>
-    form={formFactory}
+    Form={FormFactory}
     data={data}
     isLoading={isLoading}
     createHandler={createCallback}
