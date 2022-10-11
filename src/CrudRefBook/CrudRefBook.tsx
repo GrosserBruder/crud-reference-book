@@ -132,7 +132,8 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
   }, [openDeleteDialog])
 
   const onAccepteDeleteHandler = useCallback(() => {
-    onDelete(selectedItems).then(closeDeleteDialog)
+    onDelete(selectedItems)
+      .then(closeDeleteDialog)
   }, [onDelete, closeDeleteDialog, selectedItems])
 
   if (isLoading) {
