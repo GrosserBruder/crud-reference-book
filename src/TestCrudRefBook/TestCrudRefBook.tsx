@@ -70,6 +70,7 @@ function TestCrudRefBook() {
     updateHandler={updateCallback}
     deleteHandler={deleteCallback}
     columns={columns}
+    disableOpenFormAfterOnRowClick
   />
 }
 

@@ -30,7 +30,8 @@ export type CrudRefBookProps<T extends DataItem = DataItem> = Omit<RefBookProps<
   isLoading?: boolean
   Loader?: FC
   DeleteDialog?: FC<DeleteDialogProps>
-  Toolbar?: FC<CrudRefBookToolbarProps<T>>
+  Toolbar?: FC<CrudRefBookToolbarProps<T>>,
+  disableOpenFormAfterOnRowClick?: boolean
 }
 
 const MemoToolbar = memo(Toolbar) as typeof Toolbar
@@ -48,6 +49,7 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
     DeleteDialog = MemoDeleteDialog,
     Form,
     Toolbar = MemoToolbar,
+    disableOpenFormAfterOnRowClick,
     ...otherProps
   } = props
 
@@ -60,11 +62,13 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
   const [isDeleteProcess, setIsDeleteProcess] = useState<boolean>(false)
 
   const onRowClickHandler = useCallback((event: any, dataItem: T) => {
-    setSelectedItem(dataItem)
-    openForm(FORM_STATUS.UPDATE)
+    if (!disableOpenFormAfterOnRowClick) {
+      setSelectedItem(dataItem)
+      openForm(FORM_STATUS.UPDATE)
+    }
 
     onRowClick?.(event, dataItem)
-  }, [setSelectedItem, openForm, onRowClick])
+  }, [setSelectedItem, openForm, onRowClick, disableOpenFormAfterOnRowClick])
 
   const onCloseFormHandler = useCallback(() => {
     closeForm()

@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { FC, ReactNode } from "react";
 import { Loader as DefaultLoader } from "../Components/Loader";
 import "../styles/DeleteDialog.scss"
@@ -11,18 +11,35 @@ export type DeleteDialogProps = {
   onCancel?: () => void
   disabled?: boolean
   isDeleteProcess?: boolean
-  Loader?: FC
+  Loader?: FC,
+  cancelTitle?: ReactNode
+  accepteTitle?: ReactNode
 }
 
 export function DeleteDialog(props: DeleteDialogProps) {
   const {
-    open = false, content, title, onAccepte, onCancel, disabled, isDeleteProcess, Loader = DefaultLoader
+    open = false,
+    content,
+    title,
+    onAccepte,
+    onCancel,
+    disabled,
+    isDeleteProcess,
+    Loader = DefaultLoader,
+    cancelTitle = "Отменить",
+    accepteTitle = "Удалить"
   } = props
 
-  return <Dialog open={open} onClose={isDeleteProcess ? undefined : onCancel} className="delete-dialog">
+  return <Dialog
+    open={open}
+    onClose={isDeleteProcess ? undefined : onCancel}
+    className="delete-dialog"
+  >
     <DialogTitle>{title}</DialogTitle>
     <DialogContent dividers>
-      {!isDeleteProcess && content}
+      <DialogContentText>
+        {!isDeleteProcess && content}
+      </DialogContentText>
       {isDeleteProcess && <Loader />}
     </DialogContent>
     <DialogActions>
@@ -31,7 +48,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
         disabled={disabled || isDeleteProcess}
         variant="outlined"
       >
-        Отменить
+        {cancelTitle}
       </Button>
       <Button
         color="error"
@@ -39,7 +56,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
         disabled={disabled || isDeleteProcess}
         variant="outlined"
       >
-        Удалить
+        {accepteTitle}
       </Button>
     </DialogActions>
   </Dialog>
