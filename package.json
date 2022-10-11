@@ -2,7 +2,7 @@
   "name": "@grossb/crud-reference-book",
   "version": "0.1.0",
   "dependencies": {
-    "@grossb/reference-book": "^0.0.2",
+    "@grossb/reference-book": "^0.2.2",
     "@mui/material": "^5.10.8",
     "react-final-form": "^6.5.9"
   },
@@ -24,6 +24,9 @@
       "react-app/jest"
     ]
   },
+  "files": [
+    "dist/**"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
