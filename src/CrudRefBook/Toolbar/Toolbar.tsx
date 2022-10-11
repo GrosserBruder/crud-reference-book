@@ -1,9 +1,10 @@
-import { memo, ReactNode, useCallback, useMemo } from "react";
+import { ReactNode, useCallback, useMemo } from "react";
 import Add from "@mui/icons-material/Add"
 import Edit from "@mui/icons-material/Edit"
 import Delete from "@mui/icons-material/Delete"
 import ToolbarButton, { ToolbarButtonProps } from "./ToolbarButton";
 import { AllFilterData, DataItem } from "@grossb/react-data-table";
+import "../styles/Toolbar.scss"
 
 export type ToolbarProps<T extends DataItem = DataItem> = {
   children?: ReactNode
@@ -24,7 +25,7 @@ export type ToolbarProps<T extends DataItem = DataItem> = {
 }
 
 
-export function CrudToolbar<T extends DataItem = DataItem>(props: ToolbarProps<T>) {
+export function Toolbar<T extends DataItem = DataItem>(props: ToolbarProps<T>) {
   const {
     children, showCreateButton = true, showDeleteButton = true, showUpdateButton = true,
     onCreateClick, onDeleteClick, onUpdateClick, createButtonProps, deleteButtonProps,
@@ -89,4 +90,4 @@ export function CrudToolbar<T extends DataItem = DataItem>(props: ToolbarProps<T
   </div>
 }
 
-export default CrudToolbar
+export default Toolbar

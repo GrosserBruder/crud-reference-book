@@ -1,5 +1,6 @@
 import Chip, { ChipProps } from "@mui/material/Chip"
 import classnames from "classnames"
+import "../styles/ToolbarButton.scss"
 
 export type ToolbarButtonProps = Omit<ChipProps, "clickable"> & {
   show?: boolean,

@@ -1,62 +1,49 @@
 {
-  "name": "@grossb/crud-reference-book",
-  "version": "0.0.1",
-  "description": "",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GrosserBruder/crud-reference-book.git"
+  "name": "crud-reference-book",
+  "version": "0.1.0",
+  "dependencies": {
+    "@grossb/reference-book": "^0.0.2",
+    "@mui/material": "^5.10.8",
+    "react-final-form": "^6.5.9"
   },
-  "keywords": [
-    "crud ref book",
-    "crud reference book",
-    "grossb",
-    "grosser bruder"
-  ],
-  "author": {
-    "name": "Ivan Leshchinsky",
-    "email": "falenangellll@yandex.ru"
-  },
-  "license": "MIT",
   "scripts": {
+    "start": "react-scripts start",
+    "build-project": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "clean": "rimraf dist",
-    "copy:styles": "copyfiles -f src/styles/** dist/styles && copyfiles -f src/components/styles/** dist/components/styles",
+    "copy:styles": "copyfiles -f src/CrudRefBook/styles/** dist/styles && copyfiles -f src//CrudRefBook/components/styles/** dist/components/styles",
     "prebuild": "npm run clean",
     "build": "tsc -p tsconfig.prod.json",
     "postbuild": "npm run copy:styles",
-    "pub": "npm run build && npm publish"
+    "pub": "npm run build && npm publish --access=public"
   },
-  "bugs": {
-    "url": "https://github.com/GrosserBruder/crud-reference-book/issues"
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
-  "homepage": "https://github.com/GrosserBruder/crud-reference-book#readme",
-  "peerDependencies": {
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
-    "@grossb/react-table": "^0.1.6",
-    "@mui/icons-material": "^5.10.6",
-    "@mui/lab": "^5.0.0-alpha.75",
-    "@mui/material": "^5.10.8",
-    "classnames": "^2.3.1",
-    "react": ">=17.0.1",
-    "react-dom": ">=17.0.1",
-    "sass": "latest"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
-    "classnames": "^2.3.2",
     "copyfiles": "^2.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
     "rimraf": "^3.0.2",
-    "sass": "^1.55.0",
     "typescript": "^4.8.4"
-  },
-  "dependencies": {
-    "@grossb/react-data-table": "^0.4.3",
-    "@grossb/reference-book": "^0.0.1"
   }
 }
