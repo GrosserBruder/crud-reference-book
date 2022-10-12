@@ -1,5 +1,5 @@
 import classNames from "classnames"
-import "./loader.scss"
+import "../../styles/loader.scss"
 
 export type LoaderProps = {
   className?: string
