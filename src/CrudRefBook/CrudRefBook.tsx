@@ -1,5 +1,5 @@
 import "./styles/CrudRefBook.scss"
-import { DataItem } from "@grossb/react-data-table"
+import { DataItem, primitiveOrFunction } from "@grossb/react-data-table"
 import { FORM_STATUS } from "./constants/const"
 import { RefBook, RefBookProps, FormProps as RefBookFormProps } from "@grossb/reference-book"
 import { FC, memo, useCallback, useState } from "react"
@@ -8,6 +8,7 @@ import { Toolbar, ToolbarProps } from "./Toolbar"
 import useDeleteApi from "./hooks/useDeleteApi"
 import { DeleteDialog, DeleteDialogProps } from "./DeleteDialog/DeleteDialog"
 import { Loader as DefaultLoader } from "./Components/Loader";
+import classnames from "classnames"
 
 export type CrudRefBookToolbarProps<T extends DataItem = DataItem> = ToolbarProps<T> & {
   formStatus: FORM_STATUS,
@@ -50,6 +51,7 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
     Form,
     Toolbar = MemoToolbar,
     disableOpenFormAfterOnRowClick,
+    rowProps,
     ...otherProps
   } = props
 
@@ -108,13 +110,13 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
 
     if (formStatus === FORM_STATUS.UPDATE) {
       return onUpdate(data)
-        .then(() => closeForm())
+        .then(() => onCloseFormHandler())
     }
     if (formStatus === FORM_STATUS.CREATE) {
       return onCreate(data)
-        .then(() => closeForm())
+        .then(() => onCloseFormHandler())
     }
-  }, [formStatus, closeForm, onCreate, onUpdate])
+  }, [formStatus, onCloseFormHandler, onCreate, onUpdate])
 
   const onToolbarCreateClick = useCallback(() => {
     openForm(FORM_STATUS.CREATE)
@@ -136,6 +138,19 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
       .then(closeDeleteDialog)
   }, [onDelete, closeDeleteDialog, selectedItems])
 
+  const getRowProps = useCallback((dataItem: T) => {
+    const extraRowProps = primitiveOrFunction(rowProps, dataItem)
+
+    if (extraRowProps === undefined && (!selectedItem || selectedItem?.id !== dataItem.id)) return;
+
+    const className = selectedItem?.id === dataItem.id ? "selected" : undefined
+
+    return {
+      ...extraRowProps,
+      className: classnames(extraRowProps?.className, className)
+    }
+  }, [selectedItem, rowProps])
+
   if (isLoading) {
     return <div className="crud-ref-book">
       <Loader />
@@ -148,12 +163,13 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
       filterable
       selectable
       striped
+      rowProps={getRowProps}
       Toolbar={Toolbar
         ? (props) => <Toolbar
           {...props}
           formStatus={formStatus}
           openForm={openForm}
-          closeForm={closeForm}
+          closeForm={onCloseFormHandler}
           onCreateClick={onToolbarCreateClick}
           onUpdateClick={onToolbarUpdateClick}
           onDeleteClick={onToolbarDeleteClick}
@@ -167,7 +183,7 @@ export function CrudRefBook<T extends DataItem = DataItem>(props: CrudRefBookPro
         ? (props) => <Form
           {...props}
           formStatus={formStatus}
-          closeForm={closeForm}
+          closeForm={onCloseFormHandler}
           onSubmit={onSubmit}
           selectedItem={selectedItem}
         />

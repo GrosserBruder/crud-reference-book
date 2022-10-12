@@ -12,23 +12,17 @@ function delay(ms: number) {
 
 export type DhlType = {
   id: number,
-  name: string,
+  name: string | number,
 }
 
-const testData = [
-  {
-    id: 1,
-    name: "1"
-  },
-  {
-    id: 2,
-    name: "2"
-  },
-  {
-    id: 3,
-    name: "3"
-  },
-]
+const testData: Array<DhlType> = Array(100).fill(5).map((x, i) => ({
+  id: i,
+  name: i
+}))
+
+const rowProps = {
+  className: "test"
+}
 
 function TestCrudRefBook() {
   const [data, setData] = useState(testData)
@@ -70,7 +64,8 @@ function TestCrudRefBook() {
     updateHandler={updateCallback}
     deleteHandler={deleteCallback}
     columns={columns}
-    disableOpenFormAfterOnRowClick
+    rowProps={rowProps}
+  // disableOpenFormAfterOnRowClick
   />
 }
 
