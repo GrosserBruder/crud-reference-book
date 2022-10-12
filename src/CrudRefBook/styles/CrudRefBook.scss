@@ -1,4 +1,10 @@
 .crud-ref-book {
   display: flex;
   justify-content: center;
+
+  .selected {
+    .cell__wrapper {
+      background-color: rgba(0, 0, 0, 0.24);
+    }
+  }
 }

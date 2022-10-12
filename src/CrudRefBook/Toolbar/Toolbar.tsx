@@ -17,7 +17,6 @@ export type ToolbarProps<T extends DataItem = DataItem> = {
   createButtonProps?: Omit<ToolbarButtonProps, "onClick" | "show">
   updateButtonProps?: Omit<ToolbarButtonProps, "onClick" | "show">
   deleteButtonProps?: Omit<ToolbarButtonProps, "onClick" | "show">
-  multipleEdit?: boolean
   multipleDelete?: boolean
 
   selectedData: T[];
@@ -29,14 +28,13 @@ export function Toolbar<T extends DataItem = DataItem>(props: ToolbarProps<T>) {
   const {
     children, showCreateButton = true, showDeleteButton = true, showUpdateButton = true,
     onCreateClick, onDeleteClick, onUpdateClick, createButtonProps, deleteButtonProps,
-    updateButtonProps, multipleDelete, multipleEdit, selectedData = [], filterData
+    updateButtonProps, multipleDelete, selectedData = [], filterData
   } = props;
 
   const isShowUpdateButton = useMemo(() => {
     if (!showUpdateButton) return false
-    if (multipleEdit) return selectedData?.length >= 1
     return selectedData?.length === 1
-  }, [showUpdateButton, multipleEdit, selectedData])
+  }, [showUpdateButton, selectedData])
 
   const isShowDeleteButton = useMemo(() => {
     if (!showDeleteButton) return false
@@ -71,7 +69,7 @@ export function Toolbar<T extends DataItem = DataItem>(props: ToolbarProps<T>) {
       icon={<Edit />}
       show={isShowUpdateButton}
       label="Редактировать"
-      placeholder={`Нажмите, чтобы отредактировать информацию ${multipleEdit ? "выбранных записей" : "выбранной записи"}`}
+      placeholder="Нажмите, чтобы отредактировать информацию выбранной записи"
       {...updateButtonProps}
       onClick={onUpdateClickHandler}
     />
