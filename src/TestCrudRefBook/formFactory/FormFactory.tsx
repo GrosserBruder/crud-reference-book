@@ -2,8 +2,9 @@
 import { FORM_STATUS, CrudRefBookFormProps } from "../../CrudRefBook";
 import React from "react";
 import DhlTypeRefBookForm from "./TestCrudRefBookForm";
+import { DhlType } from "../TestCrudRefBook";
 
-export function FormFactory(props: CrudRefBookFormProps) {
+export function FormFactory(props: CrudRefBookFormProps<DhlType>) {
   const { formStatus, selectedItem, onSubmit, onClose } = props
 
   switch (true) {

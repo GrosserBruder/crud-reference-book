@@ -16,8 +16,8 @@ export type CrudRefBookToolbarProps<T extends DataItem = DataItem> = ToolbarProp
   closeForm: () => void,
 }
 
-export type CrudRefBookFormProps = RefBookFormProps & {
-  selectedItem?: DataItem
+export type CrudRefBookFormProps<T extends DataItem = DataItem> = RefBookFormProps<T> & {
+  selectedItem?: T
   onSubmit?: (data: any) => Promise<void> | undefined
   formStatus: FORM_STATUS,
   closeForm: () => void,
