@@ -27,7 +27,7 @@ export type CrudRefBookProps<T extends DataItem = DataItem> = Omit<RefBookProps<
   createHandler?: (data: any) => Promise<any>
   updateHandler?: (data: any) => Promise<any>
   deleteHandler?: (data: any) => Promise<any>
-  Form?: FC<CrudRefBookFormProps>
+  Form?: FC<CrudRefBookFormProps<T>>
   isLoading?: boolean
   Loader?: FC
   DeleteDialog?: FC<DeleteDialogProps>
